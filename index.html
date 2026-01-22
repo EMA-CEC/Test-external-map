@@ -88,15 +88,6 @@
           <span class="sr-only">Spatial Analysis</span>
         </button>
 
-        <button class="icon-btn" type="button"
-          data-panel="panel-nsl"
-          aria-controls="tool-panel"
-          aria-pressed="false"
-          title="NSL Index Model">
-          <span class="icon-glyph" aria-hidden="true">📊</span>
-          <span class="sr-only">NSL Index Model</span>
-        </button>
-
         <div class="icon-bar-spacer"></div>
 
         <!-- SETTINGS always bottom -->
@@ -319,20 +310,6 @@
             </div>
           </div>
 
-          <!-- NSL INDEX MODEL -->
-          <div id="panel-nsl" class="tool-panel-section" hidden>
-            <h2>NSL Index Model</h2>
-
-            <div id="nslIndexContainer">
-              <div class="nsl-button-group">
-                <button class="btn" id="nslReadMeBtn">📘 Read Me</button>
-                <button class="btn" id="nslDASelectionBtn">📋 DA Selection</button>
-                <button class="btn" id="nslRiskAssessmentBtn">⚠️ Risk Assessment</button>
-                <button class="btn" id="nslModelOutputBtn">📊 Model Output</button>
-              </div>
-            </div>
-          </div>
-
           <!-- SETTINGS -->
           <div id="panel-settings" class="tool-panel-section" hidden>
             <h2>Settings</h2>
@@ -462,170 +439,6 @@
   <div id="layerLegendSelector"></div>
 </div>
 
-<!------------------------------------------------------------>
-<!-- DA Selection Panel -->
-<div id="daSelectionPanel" class="right-slide-panel">
-  <div class="panel-header">
-    <h2>Designated Activity Selection</h2>
-    <button class="close-btn" onclick="closeDAPanel()">✖</button>
-  </div>
-
-  <div class="panel-content">
-    <!-- Project Title -->
-    <div class="form-section">
-      <h3>Project Title</h3>
-      <textarea id="projectTitle" rows="2" placeholder="Enter the project title..."></textarea>
-    </div>
-
-    <!-- CEC Number -->
-    <div class="form-section">
-      <h3>CEC Number</h3>
-      <input type="text" id="cecNumber" placeholder="Enter the CEC Reference Number..." />
-    </div>
-
-    <!-- Designated Activities Table -->
-    <div class="form-section">
-      <h3>Select Applicable Designated Activities</h3>
-      <div class="da-table-wrapper">
-        <table id="daTable">
-          <thead>
-            <tr>
-              <th>Designated Activity</th>
-              <th>Description</th>
-              <th>Selection</th>
-            </tr>
-          </thead>
-          <tbody id="daTableBody">
-            <!-- Rows will be dynamically added -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="action-buttons">
-      <button class="btn secondary" onclick="clearDASelection()">Clear Selection</button>
-      <button class="btn" onclick="confirmDASelection()">Confirm & Continue</button>
-    </div>
-  </div>
-</div>
-
-<!------------------------------------------------------------>
-<!-- Risk Assessment Panel -->
-<div id="riskAssessmentPanel" class="right-slide-panel">
-  <div class="panel-header">
-    <h2>Risk Assessment</h2>
-    <button class="close-btn" onclick="closeRiskPanel()">✖</button>
-  </div>
-
-  <div class="panel-content">
-    <!-- Project Title -->
-    <div class="form-section">
-      <h3>Project Title</h3>
-      <div id="riskProjectTitle" class="readonly-input"></div>
-    </div>
-
-    <!-- CEC Number -->
-    <div class="form-section">
-      <h3>CEC Number</h3>
-      <input type="text" id="riskCecNumber" readonly />
-    </div>
-
-    <!-- Risk Table -->
-    <div class="form-section">
-      <h3>Designated Activity Risk Assessment</h3>
-      <div class="da-table-wrapper">
-        <table id="riskTable">
-          <thead>
-            <tr>
-              <th>Designated Activity</th>
-              <th>Nature</th>
-              <th>Scale</th>
-              <th>Location</th>
-              <th>Nature Risk Guidance</th>
-              <th>Scale Risk Guidance</th>
-              <th>Location Risk Guidance</th>
-            </tr>
-          </thead>
-          <tbody id="riskTableBody">
-            <!-- Dynamically populated -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Confirm Button -->
-    <div class="action-buttons">
-      <button class="btn" onclick="confirmRiskAssessment()">Confirm & Continue</button>
-    </div>
-  </div>
-</div>
-
-<!------------------------------------------------------------>
-<!-- Model Output Panel -->
-<div id="modelOutputPanel" class="modal-centered-panel" style="display: none;">
-  <div class="panel-header">
-    <button class="close-btn" onclick="closeModelOutputPanel()">✖</button>
-  </div>
-
-  <div class="panel-content">
-    <!-- Project Info -->
-    <div class="form-section">
-      <h3>Project Title</h3>
-      <div id="outputProjectTitle" class="readonly-input"></div>
-
-      <h3>CEC Number</h3>
-      <div id="outputCecNumber" class="readonly-input"></div>
-    </div>
-
-    <!-- DA List -->
-    <div class="form-section">
-      <h3>Designated Activities Selected</h3>
-      <div id="outputDAList" class="readonly-input"></div>
-    </div>
-
-    <!-- NSL Index Summary -->
-    <div class="form-section">
-      <h3>NSL Index Summary</h3>
-      <div id="nslSummaryContainer" class="readonly-input"></div>
-    </div>
-
-    <!-- NSL Index Detail -->
-    <div class="form-section">
-      <h3>NSL Index Detail</h3>
-      <div id="nslDetailContainer" class="readonly-input"></div>
-    </div>
-
-    <!-- NSL Chart -->
-    <div class="form-section">
-      <h3>NSL Index Chart</h3>
-      <canvas id="nslChart" width="400" height="200"></canvas>
-    </div>
-
-    <!-- Officer Decision -->
-    <div class="form-section">
-      <h3>Officer Decision</h3>
-      <textarea id="officerDecision" rows="2" placeholder="Type decision..." oninput="autoResize(this)"></textarea>
-    </div>
-
-    <!-- Officer Signature + Date -->
-    <div class="form-section" style="display: flex; justify-content: space-between; align-items: flex-end;">
-      <div>
-        <h3>Officer Signature</h3>
-        <input id="officerSignature" type="text" placeholder="Type your name..." />
-      </div>
-      <div id="modelDateStamp" style="font-size: 0.9rem; color: #666;">Date: </div>
-    </div>
-
-    <!-- Download Button -->
-	<div class="download-controls">
-	  <button class="btn" id="downloadModelOutputBtn">📥 Download</button>
-	</div>
-  </div>
-</div>
-
-<!------------------------------------------------------------>
-
 <!-- Spatial Results Modal -->
 <div id="spatialResultsModal" class="modal-overlay hidden">
   <div class="modal-window">
@@ -656,7 +469,6 @@
   <script src="js/geojsonLayers.js"></script>
   <script src="js/analysisPreload.js"></script>
   <script src="js/drawnShapesManager.js"></script>
-  <script src="js/nsl.js"></script>
   <script src="js/toolpanelToggle.js"></script>
   <script src="js/panel.js"></script>
   <script src="js/unifiedSearch.js"></script>
@@ -665,7 +477,6 @@
   <script src="js/userUploads.js"></script>
   <script src="js/spatialAnalysisV2.js"></script>
   
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://unpkg.com/shpjs@latest/dist/shp.min.js"></script>
 
