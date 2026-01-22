@@ -1,0 +1,678 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CEC Applications - GIS Tool</title>
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+  <link rel="stylesheet" href="style/style.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/proj4@2.8.0"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+
+</head>
+<body>
+<div id="container">
+
+  <!-- LEFT SIDEBAR -->
+  <aside id="sidebar" aria-label="Tools sidebar">
+
+    <!-- Header / Branding -->
+    <div id="sidebar-header">
+      <div class="sidebar-brand">
+        <img src="assets/logo.png" alt="CEC Logo" class="sidebar-logo" />
+        <div class="sidebar-title-wrap">
+          <div class="sidebar-title">CEC Applications - GIS Tool</div>
+          <div class="sidebar-subtitle">Environmental Management Authority</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar content: icon bar + tool panel -->
+    <div id="sidebar-content">
+
+      <!-- ICON BAR -->
+      <nav id="icon-bar" aria-label="Tool categories">
+
+        <button class="icon-btn" type="button"
+          data-panel="panel-overview"
+          aria-controls="tool-panel"
+          aria-pressed="true"
+          title="Overview">
+          <span class="icon-glyph" aria-hidden="true">🏠</span>
+          <span class="sr-only">Overview</span>
+        </button>
+
+        <button class="icon-btn" type="button"
+          data-panel="panel-filters"
+          aria-controls="tool-panel"
+          aria-pressed="false"
+          title="Application Filters">
+          <span class="icon-glyph" aria-hidden="true">🔎</span>
+          <span class="sr-only">Application Filters</span>
+        </button>
+
+        <button class="icon-btn" type="button"
+          data-panel="panel-draw"
+          aria-controls="tool-panel"
+          aria-pressed="false"
+          title="Draw Tools">
+          <span class="icon-glyph" aria-hidden="true">✏️</span>
+          <span class="sr-only">Draw Tools</span>
+        </button>
+
+        <button class="icon-btn" type="button"
+          data-panel="panel-data"
+          aria-controls="tool-panel"
+          aria-pressed="false"
+          title="Additional Data">
+          <span class="icon-glyph" aria-hidden="true">🗂️</span>
+          <span class="sr-only">Additional Data</span>
+        </button>
+
+        <button class="icon-btn" type="button"
+          data-panel="panel-analysis"
+          aria-controls="tool-panel"
+          aria-pressed="false"
+          title="Spatial Analysis">
+          <span class="icon-glyph" aria-hidden="true">📏</span>
+          <span class="sr-only">Spatial Analysis</span>
+        </button>
+
+        <button class="icon-btn" type="button"
+          data-panel="panel-nsl"
+          aria-controls="tool-panel"
+          aria-pressed="false"
+          title="NSL Index Model">
+          <span class="icon-glyph" aria-hidden="true">📊</span>
+          <span class="sr-only">NSL Index Model</span>
+        </button>
+
+        <div class="icon-bar-spacer"></div>
+
+        <!-- SETTINGS always bottom -->
+        <button class="icon-btn" type="button"
+          data-panel="panel-settings"
+          aria-controls="tool-panel"
+          aria-pressed="false"
+          title="Settings">
+          <span class="icon-glyph" aria-hidden="true">⚙️</span>
+          <span class="sr-only">Settings</span>
+        </button>
+
+      </nav>
+
+      <!-- TOOL PANEL -->
+      <section id="tool-panel" aria-label="Tool panel content">
+
+        <!-- Collapse / Expand Tool Panel Button -->
+        <button id="panel-toggle" type="button"
+          aria-label="Collapse tool panel"
+          aria-expanded="true"
+          title="Collapse panel">◀</button>
+
+        <div id="tool-panel-inner">
+
+          <!-- OVERVIEW -->
+          <div id="panel-overview" class="tool-panel-section" hidden>
+            <h2>Overview</h2>
+
+            <div class="overview-card">
+              <p>
+                This tool integrates CEC Applications and other EMA housed data
+                to offer a basic solution for analysis. It is designed to facilitate
+                general screening and support better informed decision-making.
+              </p>
+
+              <div id="docuLinks">
+                <a href="https://drive.google.com/file/d/1VKfjK3KEq_U3nK0OnuZLw-4t0aIkrvcm/view" target="_blank" rel="noopener noreferrer">
+                  Documentation
+                </a><br/>
+                <a href="https://docs.google.com/spreadsheets/d/1NXhGUTUrZCr0nj4aSKJifa96RhZh86GmFgLo04IpKuE/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">
+                  CEC Applications Data
+                </a>
+              </div>
+            </div>
+
+            <!-- Cluster / Heatmap / Hide -->
+            <div id="dataViewToggle" class="disabled">
+              <button onclick="switchDataView('cluster')">Cluster View</button>
+              <button onclick="switchDataView('heatmap')">Heatmap View</button>
+              <button onclick="switchDataView('none')">Hide Points</button>
+            </div>
+
+          </div>
+
+          <!-- FILTERS -->
+          <div id="panel-filters" class="tool-panel-section" hidden>
+            <h2>Application Filters</h2>
+
+            <div id="filterContainer" class="disabled">
+              <h3>Filter Applications</h3>
+
+              <label for="startDate">Start Date:</label>
+              <input type="date" id="startDate" min="2001-01-01" max="2099-12-31">
+
+              <label for="endDate">End Date:</label>
+              <input type="date" id="endDate" min="2001-01-01" max="2099-12-31">
+
+              <label for="statusSelect">Status:</label>
+              <select id="statusSelect"></select>
+
+              <label for="activitySelect">Designated Activity:</label>
+              <select id="activitySelect"></select>
+
+              <label for="keywordInput">Keyword Search:</label>
+              <input type="text" id="keywordInput" placeholder="Search...">
+
+              <div class="filter-buttons">
+                <button id="applyFiltersBtn">Apply Filters</button>
+                <button id="clearFiltersBtn">Clear Filters</button>
+              </div>
+
+              <div id="filterStats">Showing all applications</div>
+
+              <hr class="section-divider" />
+
+              <!-- CEC Reference Search -->
+              <div id="cecSearchGroup">
+                <label for="cecRefInput">Search by CEC Reference:</label>
+                <input type="text" id="cecRefInput" placeholder="e.g. CEC-1234 or 1234" />
+                <div class="cec-search-buttons">
+                  <button id="cecSearchBtn">🔍 Search</button>
+                  <button id="cecClearBtn">❌ Clear</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- DRAW TOOLS -->
+          <div id="panel-draw" class="tool-panel-section" hidden>
+            <h2>Draw Tools</h2>
+
+            <div id="drawToolsContainer">
+              <p>Select a shape to draw:</p>
+              <div class="draw-buttons">
+                <button id="drawPointBtn">🟢 Draw Point</button>
+                <button id="drawPolylineBtn">➖ Draw Line</button>
+                <button id="drawPolygonBtn">🔷 Draw Polygon</button>
+                <button id="drawRectangleBtn">⬛ Draw Rectangle</button>
+                <button id="editDrawBtn">✏️ Edit Drawing</button>
+                <button id="clearDrawBtn">Clear All</button>
+              </div>
+            </div>
+            <hr class="section-divider" />
+
+            <h3>My Shapes</h3>
+            <p class="muted">Shapes you draw will appear here.</p>
+
+            <div id="myShapesList" class="my-shapes-list"></div>
+          </div>
+
+          <!-- ADDITIONAL DATA -->
+          <div id="panel-data" class="tool-panel-section" hidden>
+            <h2>Additional Data</h2>
+
+            <div id="geojsonLayersContainer">
+              <h3>Map Layers</h3>
+              <div id="geojsonLayerList"></div>
+            </div>
+
+            <hr class="section-divider" />
+
+            <div class="upload-card">
+              <h3>Upload User Data</h3>
+              <p class="muted">
+                Upload CSV (UTM), GeoJSON, or ESRI Shapefile ZIP into the map.
+              </p>
+
+              <div class="upload-actions">
+                <button id="btnAddCSV" class="btn">📄 Add CSV</button>
+                <button id="btnAddGeoJSON" class="btn">🧩 Add GeoJSON</button>
+                <button id="btnAddShapefile" class="btn">🗺️ Add Shapefile ZIP</button>
+
+                <!-- hidden file input -->
+                <input id="userUploadInput" type="file" style="display:none;" />
+              </div>
+
+              <!-- uploaded layers appear here -->
+              <div id="userUploadLayerList" class="user-upload-list">
+                <div class="muted small">Uploaded layers will appear here.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- SPATIAL ANALYSIS -->
+          <div id="panel-analysis" class="tool-panel-section" hidden>
+            <h2>Spatial Analysis</h2>
+            <div class="analysis-card">
+
+              <label class="field-label">Select Source</label>
+              <select id="analysisSourceSelect" class="field-input">
+                <option value="drawn">Drawn Shapes</option>
+                <option value="geojson">GeoJSON Layers</option>
+                <option value="uploaded">Uploaded Layers</option>
+              </select>
+
+              <label class="field-label">Select Shape / Layer</label>
+              <select id="analysisPrimarySelect" class="field-input"></select>
+
+              <label class="field-label">Select Feature (if applicable)</label>
+              <select id="analysisFeatureSelect" class="field-input" disabled>
+                <option value="">-- select feature --</option>
+              </select>
+
+              <hr class="section-divider" />
+
+              <label class="field-label">CEC Buffer Distance (m)</label>
+              <input id="cecBufferInput" type="number" class="field-input" value="500" min="0" step="50"/>
+
+              <div class="analysis-optional">
+                <div class="analysis-optional-title">Optional Parameters</div>
+
+                <label for="saStartDate" class="analysis-optional-label">Start Date</label>
+                <input type="date" id="saStartDate" class="analysis-optional-input">
+
+                <label for="saEndDate" class="analysis-optional-label">End Date</label>
+                <input type="date" id="saEndDate" class="analysis-optional-input">
+
+                <label for="saStatusFilter" class="analysis-optional-label">Status</label>
+                <select id="saStatusFilter" class="analysis-optional-input">
+                  <option value="">(--All--)</option>
+                  <option value="Issued CEC">Issued CEC</option>
+                  <option value="Application Withdrawn">Application Withdrawn</option>
+                  <option value="File closed">File closed</option>
+                  <option value="General Letter">General Letter</option>
+                  <option value="No CEC Required">No CEC Required</option>
+                  <option value="Notice of Refusal">Notice of Refusal</option>
+                  <option value="Pending">Pending</option>
+                </select>
+              </div>
+
+              <label class="field-label">Sensitive Receptor Buffer Distance (m)</label>
+              <input id="receptorBufferInput" type="number" class="field-input" value="1000" min="0" step="50"/>
+
+              <div class="analysis-actions">
+                <button id="runSpatialAnalysisBtn" class="btn primary">
+                  ▶ Run Analysis
+                </button>
+
+                <button id="clearSpatialAnalysisBtn" class="btn secondary">
+                  Reset Map 
+                </button>
+              </div>
+
+              <button id="showSpatialResultsBtn" class="btn full-width" disabled>
+                📄 Show Results
+              </button>
+
+              <div id="analysisStatusText" class="analysis-status"></div>
+
+            </div>
+          </div>
+
+          <!-- NSL INDEX MODEL -->
+          <div id="panel-nsl" class="tool-panel-section" hidden>
+            <h2>NSL Index Model</h2>
+
+            <div id="nslIndexContainer">
+              <div class="nsl-button-group">
+                <button class="btn" id="nslReadMeBtn">📘 Read Me</button>
+                <button class="btn" id="nslDASelectionBtn">📋 DA Selection</button>
+                <button class="btn" id="nslRiskAssessmentBtn">⚠️ Risk Assessment</button>
+                <button class="btn" id="nslModelOutputBtn">📊 Model Output</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SETTINGS -->
+          <div id="panel-settings" class="tool-panel-section" hidden>
+            <h2>Settings</h2>
+
+            <div class="settings-card">
+              <label class="toggle-row">
+                <input type="checkbox" id="roadsToggle" checked />
+                <span>Show Roads Layer</span>
+              </label>
+            </div>
+
+            <hr class="section-divider" />
+
+            <!-- Information block -->
+            <div class="info-card">
+              <img src="assets/logo.png" alt="Logo" class="contact-logo" />
+              <div class="cec-contact">
+                <p>
+                  CEC Unit – Technical Services<br>
+                  Environmental Management Authority<br>
+                  <a href="mailto:CEC@ema.co.tt">CEC@ema.co.tt</a>
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </div><!-- tool-panel-inner -->
+      </section><!-- tool-panel -->
+
+    </div><!-- sidebar-content -->
+  </aside>
+
+  <!-- MAP -->
+  <div id="map"></div>
+
+  <!-- Top-right unified search -->
+  <div id="top-right-controls">
+    <div class="search-wrap">
+      <input id="unifiedSearchInput"
+        type="text"
+        placeholder="Search location, Lat/Lon, or UTM (E,N)"
+        autocomplete="off" />
+      <button id="unifiedSearchClear" title="Clear">✖</button>
+    </div>
+    <ul id="unifiedSearchSuggestions" class="suggestions-list"></ul>
+  </div>
+
+<div id="inset-map"></div>
+
+</div><!-- container -->
+
+<!------------------------------------------------------------>
+	<div id="labelModal" class="modal">
+	  <div class="modal-content">
+		<h3>Label Your Shape</h3>
+		<input type="text" id="shapeLabelInput" placeholder="Enter label" />
+		<div class="modal-buttons">
+		  <button id="saveLabelBtn">Save</button>
+		  <button id="cancelLabelBtn">Cancel</button>
+		</div>
+	  </div>
+	</div>
+
+<!------------------------------------------------------------>
+	<div id="legendContainer" class="legend-container"></div>
+
+<!------------------------------------------------------------>
+<!-- Spatial Analysis Modal Panel -->
+<div id="spatialAnalysisPanel" class="modal-panel hidden">
+  <div class="modal-header">
+    <h3>Spatial Analysis Results</h3>
+    <button class="close-btn" onclick="closeSpatialAnalysis()">✖</button>
+  </div>
+
+  <!-- CEC Table -->
+  <div class="panel-block">
+    <h4>Surrounding CECs (within 500m)</h4>
+    <div id="cecWarning" style="display: none; color: #b91c1c; font-weight: 500;">
+      ⚠️ CEC data not loaded. Please retry when data is available.
+    </div>
+    <table>
+      <thead>
+        <tr><th>CEC Reference Number</th><th>Year</th><th>Status</th><th>Activity Description</th></tr>
+      </thead>
+      <tbody id="cecResultsBody"></tbody>
+    </table>
+  </div>
+
+  
+  <!-- Receptors Table -->
+  <div class="panel-block">
+    <h4>Nearby/Intersecting Sensitive Receptors</h4>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Distance</th></tr>
+      </thead>
+      <tbody id="receptorResultsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Other Info Table -->
+  <div class="panel-block">
+    <h4>Other Information</h4>
+    <table class="no-vertical-border">
+      <tbody id="otherInfoTableBody">
+        <!-- These rows will be dynamically inserted -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Shape Properties Output -->
+  <div class="panel-block">
+    <h4>Shape Properties</h4>
+    <div id="shapePropertiesOutput">Select a shape to analyze.</div>
+  </div>
+</div>
+
+<!------------------------------------------------------------>
+<!-- Spatial Visualization Popup -->
+<div id="visualizationPopup" class="modal-panel small hidden">
+  <div class="modal-header">
+    <h3>Spatial Visualization</h3>
+    <button class="close-btn" onclick="closeVisualization()">✖</button>
+  </div>
+  <div id="visualizationMap" style="height: 300px;"></div>
+  <div id="layerLegendSelector"></div>
+</div>
+
+<!------------------------------------------------------------>
+<!-- DA Selection Panel -->
+<div id="daSelectionPanel" class="right-slide-panel">
+  <div class="panel-header">
+    <h2>Designated Activity Selection</h2>
+    <button class="close-btn" onclick="closeDAPanel()">✖</button>
+  </div>
+
+  <div class="panel-content">
+    <!-- Project Title -->
+    <div class="form-section">
+      <h3>Project Title</h3>
+      <textarea id="projectTitle" rows="2" placeholder="Enter the project title..."></textarea>
+    </div>
+
+    <!-- CEC Number -->
+    <div class="form-section">
+      <h3>CEC Number</h3>
+      <input type="text" id="cecNumber" placeholder="Enter the CEC Reference Number..." />
+    </div>
+
+    <!-- Designated Activities Table -->
+    <div class="form-section">
+      <h3>Select Applicable Designated Activities</h3>
+      <div class="da-table-wrapper">
+        <table id="daTable">
+          <thead>
+            <tr>
+              <th>Designated Activity</th>
+              <th>Description</th>
+              <th>Selection</th>
+            </tr>
+          </thead>
+          <tbody id="daTableBody">
+            <!-- Rows will be dynamically added -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn secondary" onclick="clearDASelection()">Clear Selection</button>
+      <button class="btn" onclick="confirmDASelection()">Confirm & Continue</button>
+    </div>
+  </div>
+</div>
+
+<!------------------------------------------------------------>
+<!-- Risk Assessment Panel -->
+<div id="riskAssessmentPanel" class="right-slide-panel">
+  <div class="panel-header">
+    <h2>Risk Assessment</h2>
+    <button class="close-btn" onclick="closeRiskPanel()">✖</button>
+  </div>
+
+  <div class="panel-content">
+    <!-- Project Title -->
+    <div class="form-section">
+      <h3>Project Title</h3>
+      <div id="riskProjectTitle" class="readonly-input"></div>
+    </div>
+
+    <!-- CEC Number -->
+    <div class="form-section">
+      <h3>CEC Number</h3>
+      <input type="text" id="riskCecNumber" readonly />
+    </div>
+
+    <!-- Risk Table -->
+    <div class="form-section">
+      <h3>Designated Activity Risk Assessment</h3>
+      <div class="da-table-wrapper">
+        <table id="riskTable">
+          <thead>
+            <tr>
+              <th>Designated Activity</th>
+              <th>Nature</th>
+              <th>Scale</th>
+              <th>Location</th>
+              <th>Nature Risk Guidance</th>
+              <th>Scale Risk Guidance</th>
+              <th>Location Risk Guidance</th>
+            </tr>
+          </thead>
+          <tbody id="riskTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Confirm Button -->
+    <div class="action-buttons">
+      <button class="btn" onclick="confirmRiskAssessment()">Confirm & Continue</button>
+    </div>
+  </div>
+</div>
+
+<!------------------------------------------------------------>
+<!-- Model Output Panel -->
+<div id="modelOutputPanel" class="modal-centered-panel" style="display: none;">
+  <div class="panel-header">
+    <button class="close-btn" onclick="closeModelOutputPanel()">✖</button>
+  </div>
+
+  <div class="panel-content">
+    <!-- Project Info -->
+    <div class="form-section">
+      <h3>Project Title</h3>
+      <div id="outputProjectTitle" class="readonly-input"></div>
+
+      <h3>CEC Number</h3>
+      <div id="outputCecNumber" class="readonly-input"></div>
+    </div>
+
+    <!-- DA List -->
+    <div class="form-section">
+      <h3>Designated Activities Selected</h3>
+      <div id="outputDAList" class="readonly-input"></div>
+    </div>
+
+    <!-- NSL Index Summary -->
+    <div class="form-section">
+      <h3>NSL Index Summary</h3>
+      <div id="nslSummaryContainer" class="readonly-input"></div>
+    </div>
+
+    <!-- NSL Index Detail -->
+    <div class="form-section">
+      <h3>NSL Index Detail</h3>
+      <div id="nslDetailContainer" class="readonly-input"></div>
+    </div>
+
+    <!-- NSL Chart -->
+    <div class="form-section">
+      <h3>NSL Index Chart</h3>
+      <canvas id="nslChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Officer Decision -->
+    <div class="form-section">
+      <h3>Officer Decision</h3>
+      <textarea id="officerDecision" rows="2" placeholder="Type decision..." oninput="autoResize(this)"></textarea>
+    </div>
+
+    <!-- Officer Signature + Date -->
+    <div class="form-section" style="display: flex; justify-content: space-between; align-items: flex-end;">
+      <div>
+        <h3>Officer Signature</h3>
+        <input id="officerSignature" type="text" placeholder="Type your name..." />
+      </div>
+      <div id="modelDateStamp" style="font-size: 0.9rem; color: #666;">Date: </div>
+    </div>
+
+    <!-- Download Button -->
+	<div class="download-controls">
+	  <button class="btn" id="downloadModelOutputBtn">📥 Download</button>
+	</div>
+  </div>
+</div>
+
+<!------------------------------------------------------------>
+
+<!-- Spatial Results Modal -->
+<div id="spatialResultsModal" class="modal-overlay hidden">
+  <div class="modal-window">
+
+    <div class="modal-header">
+      <h2>Spatial Analysis Results</h2>
+
+      <div class="modal-actions">
+        <button id="downloadSpatialPDFBtn" class="btn small primary">⬇ Download PDF</button>
+        <button id="closeSpatialResultsBtn" class="btn small">✖ Close</button>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <div id="spatialResultsContent"></div>
+    </div>
+
+  </div>
+</div>
+
+<!------------------------------------------------------------>
+  <!-- JS Modules -->
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/mapBase.js"></script>
+  <script src="js/cecData.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/geojsonLayers.js"></script>
+  <script src="js/analysisPreload.js"></script>
+  <script src="js/drawnShapesManager.js"></script>
+  <script src="js/nsl.js"></script>
+  <script src="js/toolpanelToggle.js"></script>
+  <script src="js/panel.js"></script>
+  <script src="js/unifiedSearch.js"></script>
+  <script src="js/inset.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/userUploads.js"></script>
+  <script src="js/spatialAnalysisV2.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://unpkg.com/shpjs@latest/dist/shp.min.js"></script>
+
+
+</body>
+</html>
+

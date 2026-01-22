@@ -1,0 +1,2162 @@
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+#container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+#data {
+  width: 20%;
+  height: 100vh;
+  background-color: #ecf2e6;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+/* Container for logo and title */
+#logo-title {
+  display: flex;  
+  flex-shrink: 0;
+  color: #1B5E20;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* Logo styling */
+#cecLogo {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* info panel text */
+#welcome {
+  font-size: 0.9rem; 
+  line-height: 1.4;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  overflow: hidden;
+}
+
+#welcome.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* Links to documentation and Google Sheet */
+#docuLinks{
+	font-size:0.9em;
+}
+
+/* open/close panel button */
+#toggleBtn {
+  background-color: #4CAF50;       /* Green */
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+#toggleBtn:hover {
+  background-color: #3e8e41;
+}
+
+.section-divider {
+  margin: 12px 0;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
+
+#dataViewToggle {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#dataViewToggle button {
+  padding: 6px 12px;
+  background-color: #336699;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#dataViewToggle button:hover {
+  background-color: #254a73;
+}
+
+/* Base cluster circle */
+.marker-cluster {
+  background-clip: padding-box;
+  border-radius: 50%;
+  border: 3px solid white;
+  color: white;
+  font: bold 14px Arial, sans-serif;
+  text-align: center;
+  line-height: 40px;
+}
+
+.marker-cluster div {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+}
+
+.marker-cluster-small div {
+  background-color: #7BC96F; /* Light green */
+}
+
+.marker-cluster-medium div {
+  background-color: #F4C430; /* Yellow-orange */
+}
+
+.marker-cluster-large div {
+  background-color: #E74C3C; /* Red */
+}
+
+#map {
+  flex-grow: 1;
+  height: 100vh;
+}
+
+/* Popup field spacing and layout */
+.popup-field {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.leaflet-popup-content {
+  margin: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.popup-field strong {
+  color: #2e6b2d; /* Dark green to match title theme */
+  display: inline-block;
+  width: 140px;
+}
+
+#filterContainer {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+#filterContainer h3 {
+  font-size: 1rem;
+  color: #2e6b2d;
+  margin-bottom: 4px;
+}
+
+.date-select {
+  display: flex;
+  gap: 5px;
+}
+
+#filterContainer input[type="date"] {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#filterContainer select,
+#filterContainer input[type="text"] {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+#applyFiltersBtn,
+#clearFiltersBtn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #336699;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex: 1;
+}
+
+#applyFiltersBtn:hover,
+#clearFiltersBtn:hover {
+  background-color: #254a73;
+}
+
+#filterStats {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #444;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+#toggleFilterBtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-bottom: 8px;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+#toggleFilterBtn:hover {
+  background-color: #3e8e41;
+}
+
+#filterContainer.collapsed {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  transition: all 0.3s ease;
+}
+
+#filterContainer {
+  transition: all 0.3s ease;
+}
+
+#utmSearchContainer {
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+#utmSearchContainer h3{
+  font-size: 1rem;
+  color: #2e6b2d;
+  margin-bottom: 4px;
+}
+
+#utmSearchContainer input[type="number"] {
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.utm-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+#utmSearchBtn,
+#utmClearBtn {
+  flex: 1;
+  padding: 6px 12px;
+  background-color: #336699;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#utmSearchBtn:hover,
+#utmClearBtn:hover {
+  background-color: #254a73;
+}
+
+#drawToolsContainer {
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+
+#drawToolsContainer h3 {
+  margin-bottom: 6px;
+  color: #2e6b2d;
+}
+
+#drawLabels {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #333;
+  padding-left: 4px;
+}
+
+.draw-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.draw-buttons button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #336699;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.draw-buttons button:hover {
+  background-color: #254a73;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 6px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #336699;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal-buttons button:hover {
+  background-color: #254a73;
+}
+
+#geojsonLayersContainer {
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+
+#geojsonLayersContainer h3 {
+  margin-bottom: 8px;
+  color: #2e6b2d;
+}
+
+#geojsonLayerList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.geojson-toggle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+
+.geojson-toggle input[type="checkbox"] {
+  margin-right: 6px;
+}
+
+.geojson-toggle label {
+  flex: 1;
+}
+
+.geojson-toggle input[type="range"] {
+  margin-top: 4px;
+}
+
+#data {
+  width: 320px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto;
+  background-color: white;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+#data.collapsed {
+  transform: translateX(-100%);
+}
+
+#togglePanelTab {
+  position: absolute;
+  top: 50%;
+  left: 320px; /* Adjust based on your #data width */
+  transform: translateY(-50%);
+  background-color: #336699;
+  color: white;
+  border-radius: 0 4px 4px 0;
+  padding: 6px 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s ease;
+}
+
+#togglePanelTab:hover {
+  background-color: #254a73;
+}
+
+/* When panel is collapsed */
+#data.collapsed + #togglePanelTab {
+  left: 0;
+}
+
+#contactContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  margin-top: 20;
+  padding-top: 10;
+  border-top: 1px solid #ddd;
+  font-size: 0.85rem;
+  background: #f9f9f9;
+  color: #1f2937;
+}
+
+.contact-logo {
+  width: 40px;
+  height: auto;
+}
+
+.cec-contact p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cec-contact a {
+  color: #d97706;
+  text-decoration: none;
+}
+
+.cec-contact a:hover {
+  text-decoration: underline;
+}
+
+.leaflet-control-zoom {
+  transition: left 0.3s ease;
+  top: 10px;
+  z-index: 1002;
+}
+
+/* When #data is collapsed */
+#data.collapsed ~ .leaflet-control-zoom {
+  left: 10px;
+}
+
+.leaflet-control-scale {
+  bottom: 10px;
+  transition: left 0.3s ease;
+  z-index: 1002;
+}
+
+/* When the panel is collapsed */
+#data.collapsed ~ .leaflet-control-scale {
+  left: 10px;
+}
+
+.legend-container {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  z-index: 999;
+}
+.legend-container h4 {
+  margin: 0 0 6px;
+  font-weight: bold;
+}
+.legend-container .legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.legend-container .legend-color {
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  border: 1px solid #333;
+}
+
+.road-label span {
+  color: white;
+  font-weight: bold;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  text-shadow:
+    -1px -1px 0 black,
+    1px -1px 0 black,
+    -1px 1px 0 black,
+    1px 1px 0 black;
+}
+
+.modal-panel {
+  position: fixed;
+  right: 20px;
+  top: 60px;
+  width: 400px;
+  max-height: 80%;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  padding: 15px;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.modal-panel.small {
+  width: 350px;
+}
+
+.modal-panel.hidden {
+  display: none;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.panel-block {
+  margin-top: 15px;
+}
+
+.no-vertical-border td {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #333;
+}
+
+#visualizationMap {
+  width: 100%;
+  height: 300px;
+  margin-top: 10px;
+}
+
+#layerLegendSelector {
+  margin-top: 10px;
+}
+
+.btn {
+  background-color: #2e6b2d;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #245823;
+}
+
+.btn.full-width {
+  width: 100%;
+  display: block;
+  text-align: center;
+}
+
+.btn.secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.btn.secondary:hover {
+  background-color: #e0e0e0;
+}
+
+/* Spatial Analysis Panel Styling */
+#spatialAnalysisPanel {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 95%;
+  max-width: 1000px;
+  margin: 20px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', sans-serif;
+  color: #1f2937;
+}
+
+#spatialAnalysisPanel h3, #spatialAnalysisPanel h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #0f172a;
+  border-bottom: 2px solid #d1d5db;
+  padding-bottom: 4px;
+}
+
+#spatialAnalysisPanel .panel-block {
+  margin-bottom: 25px;
+}
+
+#spatialAnalysisPanel table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#spatialAnalysisPanel th,
+#spatialAnalysisPanel td {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.95rem;
+}
+
+#spatialAnalysisPanel th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+}
+
+#spatialAnalysisPanel table.no-vertical-border td {
+  border-left: none;
+  border-right: none;
+}
+
+/* Visualization Map Panel */
+#visualizationPopup {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+#visualizationPopup h3 {
+  margin-top: 0;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 4px;
+  color: #111827;
+}
+
+#layerLegendSelector {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+/* Close Button */
+.modal-header .close-btn {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.modal-header .close-btn:hover {
+  color: #dc2626;
+}
+
+.search-section {
+  margin-top: 15px;
+}
+
+#locationSearchInput {
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.custom-search-box {
+  margin-top: 60px; 
+  z-index: 1000;
+}
+
+.custom-search-box .btn.small {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+}
+
+#locationSearchContainer {
+  z-index: 500;
+  margin-top: 5px; 
+  margin-right: 140px;
+}
+
+#locationSearchBtn {
+  background-color: #f97316; 
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#locationSearchBtn:hover {
+  background-color: #ea580c; 
+}
+
+/* LEFT-SIDE search container */
+#searchContainer.left {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  z-index: 1001;
+  transition: left 0.3s ease;
+}
+
+#searchContainer.left.collapsed {
+  left: -200px;
+}
+
+#searchContainer.left #searchToggle {
+  position: absolute;
+  right: -30px;
+  top: 0;
+  background-color: #f97316;
+  color: white;
+  padding: 6px 8px;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#searchPanel {
+  width: 200px;
+  background: white;
+  padding: 10px;
+  border-right: 2px solid #f97316;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.2);
+}
+
+#searchPanel input {
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#searchPanel button {
+  background-color: #f97316;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  width: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#searchPanel button:hover {
+  background-color: #ea580c;
+}
+
+#cecSearchGroup {
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #f4f7f3;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+#cecSearchGroup label {
+  font-weight: 600;
+  color: #2e6b2d;
+  display: block;
+  margin-bottom: 6px;
+}
+
+#cecRefInput {
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  box-sizing: border-box;
+}
+
+.cec-search-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.cec-search-buttons button {
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #336699;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cec-search-buttons button:hover {
+  background-color: #254a73;
+}
+
+#osmSearchContainer {
+  margin-top: 16px;
+  padding-top: 8px;
+  border-top: 1px solid #ccc;
+  font-size: 0.85rem;
+  position: relative;
+}
+
+#osmSearchContainer h3 {
+  color: #2e6b2d;
+}
+
+.osm-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+#osmSearchInput {
+  flex: 1;
+  padding: 6px;
+  font-size: 0.85rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+#osmClearBtn {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #336699;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#osmClearBtn:hover {
+  background-color: #254a73;
+}
+
+#osmSuggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 2px;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  list-style: none;
+  padding: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+#osmSuggestions li {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+#osmSuggestions li:hover {
+  background-color: #f0f0f0;
+}
+
+#nslIndexContainer {
+  margin-top: 5px;
+  padding-top: 5px;
+  font-size: 0.85rem;
+}
+
+#nslIndexContainer h3 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #2e6b2d;
+}
+
+.nsl-button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nsl-button-group .btn {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #336699;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: left;
+}
+
+.nsl-button-group .btn:hover {
+  background-color: #254a73;
+}
+
+.right-slide-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 70%;
+  height: 100%;
+  background: white;
+  border-left: 2px solid #ccc;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+  z-index: 2000;
+  display: none;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.panel-header h2 {
+  font-size: 1.2rem;
+  color: #2e6b2d;
+  margin: 0;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #999;
+}
+
+.form-section {
+  margin-bottom: 20px;
+}
+
+textarea#projectTitle {
+  width: 100%;
+  font-size: 0.95rem;
+  padding: 6px;
+  resize: vertical;
+  min-height: 60px;
+}
+
+#cecNumber {
+  width: 100%;
+  padding: 6px;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.da-table-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#daTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  background-color: #f8f9fa;
+}
+
+#daTable thead {
+  background-color: #336699;
+  color: white;
+}
+
+#daTable th, #daTable td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  vertical-align: top;
+}
+
+#daTable td.desc {
+  white-space: pre-line;
+}
+
+#daTable tbody tr:nth-child(even) {
+  background-color: #eef2f5;
+}
+
+#daTable select {
+  width: 100%;
+  padding: 4px;
+  font-size: 0.85rem;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#riskProjectTitle {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  padding: 6px;
+  resize: none;
+  overflow: hidden;
+  background-color: #f9fafb;
+  white-space: pre-wrap;
+  line-height: 1.4
+}
+
+.readonly-input {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background-color: #f9fafb;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+
+#riskTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  background-color: #f8f9fa;
+}
+
+#riskTable td:nth-child(2),
+#riskTable th:nth-child(2), /* Nature */
+#riskTable td:nth-child(3),
+#riskTable th:nth-child(3), /* Scale */
+#riskTable td:nth-child(4),
+#riskTable th:nth-child(4)  /* Location */
+{
+  width: 5%;
+  min-width: 90px;
+}
+
+#riskTable td:nth-child(5),
+#riskTable td:nth-child(6),
+#riskTable td:nth-child(7) {
+  width: auto;
+}
+
+#riskTable thead {
+  background-color: #336699;
+  color: white;
+}
+
+#riskTable th, #riskTable td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+  text-align: left;
+}
+
+#riskTable tbody tr:nth-child(even) {
+  background-color: #eef2f5;
+}
+
+#riskTable select {
+  width: 100%;
+  padding: 4px;
+  font-size: 0.85rem;
+}
+
+#riskTable td.guidance {
+  white-space: pre-line;
+  font-size: 0.8rem;
+  color: #444;
+}
+
+#riskTable td.guidance strong {
+  color: #1e3a8a;
+}
+
+.da-table-wrapper {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+}
+
+#modelOutputPanel.modal-centered-panel {
+  position: fixed;
+  top: 5px;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 816px;
+  height: calc(100vh - 10px);
+  max-height: 1056px;
+
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.03);
+
+  z-index: 3000;
+  display: none;
+  flex-direction: column;
+  padding: 30px 40px;
+  box-sizing: border-box;
+  overflow: hidden;
+  font-size: 0.9rem;
+  border-radius: 6px;
+}
+
+#modelOutputPanel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+#modelOutputPanel .panel-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  font-size: 13px;
+}
+
+#modelOutputPanel .form-section {
+  margin-bottom: 10px;
+}
+
+#modelOutputPanel .form-section h3 {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+#modelOutputPanel .readonly-input,
+#modelOutputPanel input,
+#modelOutputPanel textarea {
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #f9fafb;
+}
+
+#modelOutputPanel #officerSignature,
+#modelOutputClone #officerSignature {
+  font-family: "Segoe Script", cursive;
+  font-size: 1.1rem;
+}
+
+#modelOutputPanel #officerDecision,
+#modelOutputClone #officerDecision {
+  font-size: 0.85rem;
+  line-height: 1.3;
+  resize: none;
+  overflow: hidden;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9fafb;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#modelOutputPanel #modelDateStamp {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: right;
+}
+
+#modelOutputPanel #nslChart {
+  width: 80%;
+  height: 120px;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#modelOutputPanel .btn {
+  font-size: 0.85rem;
+  padding: 6px 10px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+/* =========================================================
+   Noise-Map style sidebar layout (CEC upgrade)
+========================================================= */
+
+#container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+#sidebar {
+  width: 360px;
+  background: #ecf2e6;
+  border-right: 1px solid #cfd8c3;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#sidebar-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid #cfd8c3;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-logo {
+  width: 52px;
+  height: auto;
+}
+
+.sidebar-title {
+  font-weight: 700;
+  color: #1B5E20;
+}
+
+.sidebar-subtitle {
+  font-size: 0.85rem;
+  color: #2e6b2d;
+}
+
+#sidebar-content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+#icon-bar {
+  width: 56px;
+  border-right: 1px solid #cfd8c3;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 6px;
+  gap: 8px;
+  background: #e6edde;
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #cfd8c3;
+  border-radius: 10px;
+  background: #f6faf2;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.icon-btn[aria-pressed="true"] {
+  background: #d9ebd0;
+  border-color: #86b97f;
+}
+
+.icon-glyph {
+  font-size: 18px;
+}
+
+.icon-bar-spacer {
+  flex: 1;
+}
+
+#tool-panel {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#panel-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  border: 1px solid #cfd8c3;
+  background: #f6faf2;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+#tool-panel-inner {
+  overflow-y: auto;
+  padding: 12px;
+  padding-top: 44px;
+  height: 100%;
+}
+
+.tool-panel-section h2 {
+  margin: 0 0 10px 0;
+  color: #1B5E20;
+  font-size: 1.05rem;
+}
+
+.section-divider {
+  margin: 12px 0;
+  border: 0;
+  border-top: 1px solid #cfd8c3;
+}
+
+.overview-card,
+.upload-card,
+.settings-card,
+.info-card {
+  background: #f6faf2;
+  border: 1px solid #cfd8c3;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.muted {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.upload-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.disabled-row {
+  opacity: 0.6;
+}
+
+/* Toolpanel collapsed state */
+body.toolpanel-collapsed #tool-panel {
+  width: 0;
+  flex: 0;
+  overflow: hidden;
+}
+
+body.toolpanel-collapsed #panel-toggle {
+  right: -6px;
+}
+
+/* Keep Spatial Analysis inputs inside the card */
+#panel-analysis input,
+#panel-analysis select,
+#panel-analysis textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* slightly reduce input height inside analysis card */
+#panel-analysis input,
+#panel-analysis select {
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+/* Slightly more breathing room between fields */
+#panel-analysis label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+/* Optional parameters block (smaller font, subtle) */
+.analysis-optional {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed #cbd5e1;
+}
+
+.analysis-optional-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 6px;
+}
+
+.analysis-optional-label {
+  font-size: 0.8rem;
+  margin-top: 8px;
+  display: block;
+  color: #475569;
+}
+
+.analysis-optional-input {
+  font-size: 0.85rem;
+}
+
+/* Accessibility helper */
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+#top-right-controls {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 999;
+  width: 320px;
+}
+
+.search-wrap {
+  display: flex;
+  gap: 6px;
+  background: white;
+  border: 1px solid #cfd8c3;
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+
+#unifiedSearchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+}
+
+#unifiedSearchClear {
+  border: none;
+  cursor: pointer;
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+.suggestions-list {
+  list-style: none;
+  margin: 6px 0 0 0;
+  padding: 0;
+  background: white;
+  border: 1px solid #cfd8c3;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.suggestions-list li {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eef2e8;
+  font-size: 0.85rem;
+}
+
+.suggestions-list li:hover {
+  background: #f6faf2;
+}
+
+#inset-map {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 220px;
+  height: 160px;
+  z-index: 999;
+  border: 2px solid rgba(0,0,0,0.25);
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+
+/* When collapsed, sidebar shrinks to icon-bar width */
+body.toolpanel-collapsed #sidebar {
+  width: 56px;
+}
+
+/* Hide header when collapsed (optional but cleaner) */
+body.toolpanel-collapsed #sidebar-header {
+  display: none;
+}
+
+/* Push Leaflet layers control down below unified search */
+#map .leaflet-top.leaflet-right .leaflet-control-layers {
+  margin-top: 64px;
+}
+
+/* =========================================================
+   My Shapes List (Draw Panel)
+========================================================= */
+
+.my-shapes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shape-item {
+  background: #f6faf2;
+  border: 1px solid #cfd8c3;
+  border-radius: 12px;
+  padding: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.shape-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.shape-name {
+  flex: 1 1 auto;
+  min-width: 0;  
+  height: 34px;             
+  border: 1px solid #cfd8c3;
+  border-radius: 10px;
+  padding: 6px 10px;
+  outline: none;
+  background: white;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.shape-btn {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid #cfd8c3;
+  background: #ffffff;
+  border-radius: 10px;
+  cursor: pointer;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+.shape-btn:hover {
+  background: #e9f5e0;
+}
+
+.shape-controls {
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.shape-controls label {
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.shape-opacity {
+  flex: 1;
+}
+
+/* =========================================================
+   Spatial Analysis Panel UI
+========================================================= */
+
+.analysis-card {
+  background: #f6faf2;
+  border: 1px solid #cfd8c3;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.field-label {
+  display: block;
+  margin: 8px 0 4px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1B5E20;
+}
+
+.field-input {
+  width: 100%;
+  border: 1px solid #cfd8c3;
+  border-radius: 10px;
+  padding: 8px;
+  outline: none;
+  background: white;
+  font-size: 0.9rem;
+}
+
+/* =========================================================
+   Modal for Results (scroll both directions)
+========================================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+}
+
+.modal-window {
+  width: min(1100px, 96vw);
+  height: min(720px, 92vh);
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #cfd8c3;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1B5E20;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-body {
+  flex: 1;
+  padding: 12px 14px;
+  overflow: auto;      /* vertical scrolling */
+}
+
+/* Allow horizontal scrolling inside results content */
+#spatialResultsContent {
+  min-width: 900px;    /* forces horizontal scroll if needed */
+}
+
+/* Utility */
+.hidden {
+  display: none !important;
+}
+
+/* Stronger red delete button for shapes */
+.shape-delete-btn {
+  border: 1px solid #ef4444;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+.shape-delete-btn:hover {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+
+  border: 1px solid #ef4444;
+  background: #fecaca;
+  color: #b91c1c;
+
+  border-radius: 10px;
+  cursor: pointer;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+#panel-analysis .btn {
+  margin-top: 10px;
+}
+
+/* Results tables inside Spatial Results Modal */
+.results-table-wrap {
+  overflow: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.results-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 900px;
+  font-size: 0.9rem;
+}
+
+.results-table th,
+.results-table td {
+  text-align: left;
+  padding: 10px 12px; 
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+  line-height: 1.35;
+}
+
+.results-table thead th {
+  background: #f6faf2;
+  color: #1B5E20;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.results-table tbody tr:hover {
+  background: #f0fdf4;
+}
+
+/* Run + Clear buttons in Spatial Analysis */
+.analysis-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.analysis-actions .btn {
+  flex: 1; 
+}
+
+#clearSpatialAnalysisBtn {
+  border: 1px solid #cbd5e1;
+  background: #a88378;
+  color: #ffffff;
+}
+
+#clearSpatialAnalysisBtn:hover {
+  background: #5a463c;
+}
+
+#clearSpatialAnalysisBtn:active {
+  transform: translateY(1px);
+}
+
+/* Give Show Results its own spacing */
+#showSpatialResultsBtn {
+  margin-top: 10px;
+}
+
+/* Uploaded layer list */
+.user-upload-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Layer card layout */
+.upload-layer-card .layer-card-toprow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Eye toggle */
+.layer-eye-btn {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.layer-eye-btn.on {
+  background: #14532d;
+  color: #fff;
+  border-color: #14532d;
+}
+
+/* Style panel */
+.upload-style-panel {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.upload-style-panel.hidden {
+  display: none;
+}
+
+.upload-style-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Color row */
+.upload-color-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.upload-color-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* small muted helper */
+.small {
+  font-size: 12px;
+}
+
+/* =========================================================
+   Pretty popup styling (CEC Google Sheet points)
+   ========================================================= */
+
+/* Make the entire Leaflet popup feel modern */
+.leaflet-popup.cec-popup-wrapper .leaflet-popup-content-wrapper {
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.leaflet-popup.cec-popup-wrapper .leaflet-popup-content {
+  margin: 0;
+  width: 340px;
+}
+
+.leaflet-popup.cec-popup-wrapper .leaflet-popup-tip {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Main popup container */
+.cec-popup {
+  font-family: Arial, sans-serif;
+  line-height: 1.25;
+  background: #fff;
+}
+
+/* Header */
+.cec-popup__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 12px 10px;
+  background: linear-gradient(135deg, #edf7ee, #ffffff);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cec-popup__eyebrow {
+  font-size: 0.72rem;
+  color: rgba(0, 0, 0, 0.55);
+  margin-bottom: 2px;
+}
+
+.cec-popup__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f3d1f;
+  letter-spacing: 0.2px;
+}
+
+/* Meta row under header */
+.cec-popup__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.cec-popup__meta strong {
+  color: rgba(0, 0, 0, 0.82);
+}
+
+.cec-popup__dot {
+  opacity: 0.5;
+}
+
+/* Key/Value grid */
+.cec-popup__grid {
+  padding: 0 12px 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.cec-popup__row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.cec-popup__k {
+  font-size: 0.78rem;
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.cec-popup__v {
+  font-size: 0.82rem;
+  color: rgba(0, 0, 0, 0.82);
+  word-break: break-word;
+}
+
+/* Description + Comment blocks */
+.cec-popup__section {
+  padding: 0 12px 12px;
+}
+
+.cec-popup__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(46, 107, 45, 0.95);
+  margin-bottom: 6px;
+}
+
+.cec-popup__text {
+  font-size: 0.82rem;
+  color: rgba(0, 0, 0, 0.78);
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  padding: 8px 10px;
+  max-height: 90px;
+  overflow: auto;
+}
+
+/* Coordinates footer */
+.cec-popup__coords {
+  padding: 10px 12px 12px;
+  font-size: 0.78rem;
+  color: rgba(0, 0, 0, 0.65);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* =========================================================
+   Status badge styling (you already output these spans)
+   ========================================================= */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15px;
+  white-space: nowrap;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Match your badge class names from utils.js */
+.status-issued {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border-color: #a5d6a7;
+}
+
+.status-withdrawn {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #d1d5db;
+}
+
+.status-closed {
+  background: #eef2ff;
+  color: #3730a3;
+  border-color: #c7d2fe;
+}
+
+.status-lime {
+  background: #ecfccb;
+  color: #365314;
+  border-color: #bef264;
+}
+
+.status-refused {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.status-pending {
+  background: #fff7ed;
+  color: #9a3412;
+  border-color: #fed7aa;
+}
+
+.status-letter {
+  background: #e0f2fe;
+  color: #075985;
+  border-color: #bae6fd;
+}
+
+/* GeoJSON Group Headings */
+.geojson-group-block {
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.geojson-group-title {
+  margin: 6px 0 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.geojson-group-list {
+  display: block;
+}
