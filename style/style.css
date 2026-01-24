@@ -1435,13 +1435,27 @@ body.modal-open {
 
 .overview-card,
 .upload-card,
-.settings-card,
-.info-card {
+.settings-card {
   background: #f6faf2;
   border: 1px solid #cfd8c3;
   border-radius: 12px;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+.info-card {
+  position: absolute;
+  bottom: 10px; 
+  left: 50%;
+  transform: translateX(-50%);
+  
+  width: calc(95% - 20px);
+  max-width: 500px;
+  
+  background: #f6faf2;
+  border: 1px solid #cfd8c3;
+  border-radius: 12px;
+  padding: 10px;
 }
 
 .muted {
